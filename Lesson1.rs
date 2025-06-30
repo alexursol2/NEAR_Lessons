@@ -1,6 +1,7 @@
 use near_sdk::near;
 
 #[near(contract_state)]
+#[derive(Default)]  // Add Default trait
 pub struct SimpleToken{
     total_supply: u128,
     owner: String,
@@ -35,13 +36,13 @@ impl SimpleToken{
         amount > 0 && amount < 1000000
     }
 
-    pub fn transfer(&mut self, to: String, amount: u128) -> bool{
+    pub fn transfer(&mut self, _to: String, _amount: u128) -> bool{
         true
     }
 
-    // borrowed string
-    pub fn set_owner(&mut self, new_owner: &str){
-        self.owner = new_owner.to_string();
+    // Change &str to String for NEAR compatibility
+    pub fn set_owner(&mut self, new_owner: String){
+        self.owner = new_owner;
     }
 
     pub fn pause(&mut self){
