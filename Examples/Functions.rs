@@ -11,7 +11,7 @@ impl Contract{
         self.counter + add
     }
 
-    fn prviate_counter(&self) -> u32{
+    fn private_counter(&self) -> u32{
         1
     }
 }
