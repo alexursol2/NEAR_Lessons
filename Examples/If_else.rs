@@ -19,7 +19,13 @@ impl Default for Contract {
 
 #[near]
 impl Contract{
-    pub fn set_staking_tier(&mut self, amount: u64) -> String{
+    pub fn set_staking_tier(&mut self, amount: u64) -> String {
+        // == checks if two values are exactly equal.
+        // != checks if two values are different.
+        // > checks if left value is bigger than right value.
+        // < checks if left value is smaller than right value.
+        // >= checks if left value is bigger than or equal to right value.
+        // <= checks if left value is smaller than or equal to right value.
         if amount >= 1000 {
             self.tier = "Diamond".to_string();
         } else if amount >= 500 {
@@ -48,4 +54,5 @@ impl Contract{
             self.counter += 1;
         }
     }
+
 }
