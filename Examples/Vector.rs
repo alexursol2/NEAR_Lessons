@@ -1,4 +1,14 @@
-// Function 1: Manage whitelist of approved users
+use near_sdk::near;
+
+#[near(contract_state)]
+#[derive(Default)]
+pub struct Contract {
+
+}
+
+#[near]
+impl Contract {
+    // Function 1: Manage whitelist of approved users
     pub fn manage_user_whitelist(&self) -> String {
         // Create empty vector - starts with zero capacity
         let mut whitelist: Vec<String> = Vec::new();
@@ -64,3 +74,4 @@
             pop_result, remove_result, insert_result, find_result, sum_result, filter_result
         )
     }
+}
