@@ -1,3 +1,13 @@
+use near_sdk::near;
+use std::collections::HashMap;
+
+#[near(contract_state)]
+pub struct Contract {
+
+}
+
+#[near]
+impl Contract {
     // Function 1: Manage user token balances
     pub fn manage_user_balances() -> String {
         // Create HashMap to store user balances (account_id -> balance)
@@ -41,7 +51,8 @@
         let burn_result = format!("Burned NFT #2 from: {}", burned_nft.unwrap_or("none".to_string()));
         
         format!(
-            "Total: {} | {} | {} | {}", 
+            "Total: {} | {}", 
             total_nfts, burn_result
         )
     }
+}
