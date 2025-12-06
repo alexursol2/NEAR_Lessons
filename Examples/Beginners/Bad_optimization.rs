@@ -1,59 +1,34 @@
-use near_sdk::{env, near, AccountId};
+use near_sdk::near;
+use near_sdk::collections::Vector;
 
-// ❌ WRONG: Separate, complex struct (Anti-pattern 1)
-pub struct ListingData {
-    owner: String,       // ❌ String instead of AccountId (Anti-pattern 2)
-    price: u128,         // ❌ u128 instead of u64 (Anti-pattern 2)
-    // Removed is_active
-}
-
-// ❌ WRONG: Contract stores complex structs (Anti-pattern 1)
 #[near(contract_state)]
 pub struct Contract {
-    listings: Vector<ListingData>,
+    pub value: u32,
+    pub items: Vector<String>,
 }
 
 impl Default for Contract {
     fn default() -> Self {
         Self {
-            listings: Vector::new(b"l"),
+            value: 5,
+            items: Vector::new(b"i"),
         }
     }
 }
 
 #[near]
 impl Contract {
-    // ❌ WRONG FUNCTION 1: Demonstrates Anti-patterns 3, 4, 5 with dual inputs
-    pub fn create_listings_owner_only(&mut self, prices: Vec<u128>) {
-        // No input validation here (Anti-pattern 4)
-        
-        for price in prices {
-            // ❌ Repeated Environment Calls INSIDE the loop (Anti-pattern 3)
-            let caller_id = env::predecessor_account_id().to_string(); 
-
-            // ❌ No Batching: Pushing complex struct elements one by one
-            self.listings.push(&ListingData {
-                owner: caller_id.clone(), // Clone() is also costly
-                price: 0,
-            });
-        }
+    // 2. ❌ BAD: Single Action Per Transaction (No Batching)
+    pub fn insert_item_bad(&mut self, item: String) {
+        self.items.push(item);
     }
-    
-    // ❌ WRONG FUNCTION 2: Demonstrates Anti-pattern 3 (Wasting gas on fixed data)
-    pub fn create_listings_price_only(&mut self, prices: Vec<u128>) {
-        // No input validation here (Anti-pattern 4)
-        
-        for price in prices {            
-            // ❌ Wastes gas repeating the call and clone inside the loop
-            self.listings.push(&ListingData {
-                owner: 0,
-                price,
-            });
 
-            // ❌ Late Validation
-            if price == 0 {
-                break;
-            }
+    // ❌ BAD: O(n) counting via loop instead of using len()
+    pub fn get_total_item_count_bad(&self) -> u64 {
+        let mut count = 0;
+        for _ in self.items.iter() {
+            count += 1;
         }
+        count
     }
 }
